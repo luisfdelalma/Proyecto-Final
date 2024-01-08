@@ -1,0 +1,21 @@
+error: Error: ReferenceError: user is not defined
+error: user is not defined
+error: req.res is not a function
+error: transporter.sendMail is not a function
+error: secret or public key must be provided {"name":"JsonWebTokenError"}
+error: jwt expired {"expiredAt":"2024-01-03T01:45:08.000Z","name":"TokenExpiredError"}
+error: jwt expired {"expiredAt":"2024-01-03T01:45:08.000Z","name":"TokenExpiredError"}
+error: jwt expired {"expiredAt":"2024-01-03T01:45:08.000Z","name":"TokenExpiredError"}
+error: jwt expired {"expiredAt":"2024-01-03T01:45:08.000Z","name":"TokenExpiredError"}
+error: jwt expired {"expiredAt":"2024-01-03T01:45:08.000Z","name":"TokenExpiredError"}
+error: req is not defined
+error: req is not defined
+error: req is not defined
+error: req is not defined
+error: req is not defined
+error: ((intermediate value) - (intermediate value)).getMinutes is not a function
+error: difference.getMinutes is not a function
+error: difference.getMinutes is not a function
+error: difference.getMinutes is not a function
+error: difference.getMinutes is not a function
+error: difference.getMinutes is not a function

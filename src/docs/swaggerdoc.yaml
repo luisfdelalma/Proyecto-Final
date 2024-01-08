@@ -1,0 +1,539 @@
+openapi: 3.0.3
+info:
+  title: CoderHouse ecommerce backend - By Luis De La Torre
+  description: |-
+    Proyecto final de curso donde se diseña, construye, documenta y despliega el backend de un ecommerce
+  contact:
+    email: luisf.dlta@gmail.com
+  version: 1.0.0
+tags:
+  - name: products
+    description: Todos los eventos relacionados a productos dentro de la plataforma
+  - name: carts
+    description: Todos los eventos relacionados a carritos de compra dentro de la plataforma
+paths:
+  /api/products/search:
+    get:
+      summary: Busca productos en la base de datos
+      tags:
+        - products
+      parameters:
+        - name: limit
+          in: query
+          description: Número de productos que quieres ver en cada página
+          schema:
+            type: integer
+        - name: página
+          in: query
+          description: Número de página que quieres visualizar
+          schema:
+            type: integer
+        - name: sort
+          in: query
+          description: Indica el orden en el cual se muestran los productos acorde a su precio (ASC or DESC)
+          schema:
+            type: string
+        - name: category
+          in: query
+          description: La categoría de producto que quieres ver
+          schema:
+            type: string
+            items:
+              type: string
+        - name: status
+          in: query
+          description: Define si quieres ver todos los productos ó solo aquellos que tienen disponibilidad o sólo aquellos que no tienen disponibilidad en el momento
+          schema:
+            type: string
+            items:
+              type: boolean
+      responses:
+        "200":
+          description: productos obtenidos exitosamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/product"
+        "500":
+          description: "Error interno del servidor"
+  /api/products/{pid}:
+    get:
+      summary: Obtiene solo un producto por BID
+      tags:
+        - products
+      parameters:
+        - name: pid
+          in: path
+          description: Product ID
+          required: true
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Búsqueda exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/product"
+        "500":
+          description: "Error interno del servidor"
+  /api/products/:
+    post:
+      summary: Crea un nuevo producto
+      tags:
+        - products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example: |
+              {
+                "title": "Product Title",
+                "BId": "123",
+                "description": "Product Description",
+                "code": "ABC123",
+                "price": 19.99,
+                "status": true,
+                "stock": 100,
+                "category": "Category A",
+                "thumbnail": "url/to/thumbnail",
+                "owner": "6575c1dea3fd2b8c83776099"
+              }
+      responses:
+        "200":
+          description: Producto creado con éxito
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/product"
+              example: |
+                {
+                  "status": "success",
+                  "payload": {
+                    "_id": "657xb1dea3fd2b8c83776fb41",
+                    "title": "Product Title",
+                    "BId": "123",
+                    "description": "Product Description",
+                    "code": "ABC123",
+                    "price": 19.99,
+                    "status": true,
+                    "stock": 100,
+                    "category": "Category A",
+                    "thumbnail": "url/to/thumbnail",
+                  "owner": "6575c1dea3fd2b8c83776099"
+                  }
+                }
+        "500":
+          description: "Error interno del servidor"
+  /api/products/{BId}:
+    put:
+      summary: Actualiza la información de un producto ingresando su BId (Business Identification)
+      tags:
+        - products
+      parameters:
+        - name: BId
+          in: path
+          description: Identificción del producto con el numero interno de la empresa
+          required: true
+          schema:
+            type: number
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/product"
+            example: |
+              {
+                "title": "Modified Title",
+                "description": "Modified Description",
+                "price": 29.99,
+                "status": false,
+                "stock": 50,
+                "category": "Modified Category"
+              }
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              example: |
+                {
+                  "result": "success",
+                  "payload": {
+                    "_id": "657xb1dea3fd2b8c83776fb41",
+                    "title": "Modified Title",
+                    "BId": "123",
+                    "description": "Modified Description",
+                    "code": "ABC123",
+                    "price": 19.99,
+                    "status": true,
+                    "stock": 100,
+                    "category": "Modified Category",
+                    "thumbnail": "url/to/thumbnail",
+                  "owner": "6575c1dea3fd2b8c83776099"
+                  }
+                }
+        "500":
+          description: "Error interno del servidor"
+    delete:
+      summary: Borra un producto ingresando el BId (Business Identification) del mismo
+      tags:
+        - products
+      parameters:
+        - name: BId
+          in: path
+          description: Product ID
+          required: true
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Producto eliminado con éxito
+          content:
+            application/json:
+              example: |
+                {
+                  "result": "success",
+                  "payload": {}
+                }
+        "500":
+          description: "Error interno del servidor"
+
+  /api/carts:
+    post:
+      summary: Crea un nuevo carrito de compras
+      tags:
+        - carts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example: |
+              {
+                "CId": "123",
+                "products": [
+                  {
+                    "id": "product_id_1",
+                    "quantity": 2
+                  }
+                ],
+                "user": "6575xyzea3fd2b8c83776fb4"
+              }
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              example: |
+                {
+                  "_id": "6575xyzea3876b8c83776fb4",
+                  "result": "success",
+                  "payload": {
+                    "CId": "123",
+                  "products": [
+                    {
+                      "id": "product_id_1",
+                      "quantity": 2
+                    }
+                ],
+                "user": "6575xyzea3fd2b8c83776fb4"
+                  }
+                }
+        "500":
+          description: "Error interno del servidor"
+    delete:
+      summary: Delete a shopping cart
+      parameters:
+        - name: cid
+          in: path
+          description: Cart ID
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              example: |
+                {
+                  "result": "success",
+                  "payload": {}
+                }
+    put:
+      summary: Modify a shopping cart
+      parameters:
+        - name: cid
+          in: path
+          description: Cart ID
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            example: |
+              {
+                "id": "product_id",
+                "quantity": 3
+              }
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              example: |
+                {
+                  "result": "success",
+                  "payload": {}
+                }
+  /api/carts/{cid}/products/{pid}:
+    delete:
+      summary: Delete a product from a shopping cart
+      parameters:
+        - name: cid
+          in: path
+          description: Cart ID
+          required: true
+          schema:
+            type: string
+        - name: pid
+          in: path
+          description: Product ID
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              example: |
+                {
+                  "result": "success",
+                  "payload": {}
+                }
+    put:
+      summary: Modify quantity of a product in a shopping cart
+      parameters:
+        - name: cid
+          in: path
+          description: Cart ID
+          required: true
+          schema:
+            type: string
+        - name: pid
+          in: path
+          description: Product ID
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            example: |
+              {
+                "quantity": 4
+              }
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              example: |
+                {
+                  "result": "success",
+                  "payload": {}
+                }
+  /api/carts/{cid}:
+    get:
+      summary: Get the details of a shopping cart
+      parameters:
+        - name: cid
+          in: path
+          description: Cart ID
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              example: |
+                {
+                  "CId": "123",
+                  "products": [
+                    {
+                      "id": "product_id_1",
+                      "quantity": 2
+                    },
+                    {
+                      "id": "product_id_2",
+                      "quantity": 1
+                    }
+                  ],
+                  "total": 59.99,
+                  "prices": [
+                    {
+                      "product": "product_id_1"
+                    },
+                    {
+                      "product": "product_id_2"
+                    }
+                  ]
+                }
+  /api/carts/toCart/{pid}:
+    post:
+      summary: Add a product to the shopping cart
+      parameters:
+        - name: pid
+          in: path
+          description: Product ID
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            example: |
+              {}
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              example: |
+                {
+                  "result": "success",
+                  "payload": {}
+                }
+  /api/carts/{cid}/purchase:
+    post:
+      summary: Purchase the products in the shopping cart
+      parameters:
+        - name: cid
+          in: path
+          description: Cart ID
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            example: |
+              {
+                "product_id_1": {
+                  "quantity": 2
+                },
+                "product_id_2": {
+                  "quantity": 1
+                }
+              }
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              example: |
+                {
+                  "code": "PURCHASE_CODE",
+                  "date": "2024-01-05T12:00:00Z",
+                  "total": 59.99,
+                  "client": "user@example.com",
+                  "purchased": [
+                    {
+                      "id": "product_id_1",
+                      "purchasedQ": 2,
+                      "price": 29.99
+                    },
+                    {
+                      "id": "product_id_2",
+                      "purchasedQ": 1,
+                      "price": 29.99
+                    }
+                  ],
+                  "rejected": []
+                }
+
+components:
+  securitySchemes:
+    jwt:
+      type: http
+      scheme: bearer
+  schemas:
+    product:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Id generado en MongoDB
+        title:
+          type: string
+          description: Nombre del producto
+        BId:
+          type: number
+          description: Código interno del producto
+        description:
+          type: string
+          description: Es la descripción del producto
+        code:
+          type: string
+          description: codigo general del producto
+        price:
+          type: number
+          description: El precio del producto
+        status:
+          type: boolean
+          description: Indica si el producto está disponible para la venta o no
+        stock:
+          type: number
+          description: Indica el numero de unidades que existen en la empresa
+        category:
+          type: string
+          description: Categoría del producto
+        thumbnail:
+          type: string
+          description: Un link hacia la imagen del producto
+        owner:
+          type: string
+          description: Es un ObjectID que dirige hacia la información del usuario que creó el producto en el sistema
+      example:
+        _id: 659561976f2766c8439c1a89
+        title: "nulla654"
+        BId: 690767
+        description: "quis laborum fugiat cupidatat duis commodo ullamco proident enim ullam…"
+        code: "f9dac53f-b0f4-4f94-8d20-4d4bd2d0b210"
+        price: 2007
+        status: true
+        stock: 27
+        category: "Category C"
+        thumbnail: "https://www.Hines.com"
+        owner: "6575c1dea3fd2b8c83776099"
+
+    cart:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: ID autogenerado por MongoDB
+        CId:
+          type: number
+          description: Cart Identification - numero de carrito interno
+        products:
+          type: array
+          description: Informacion de los productos que se van a comprar
+          items:
+            $ref: "#/components/schemas/product"
+        user:
+          type: string
+          description: Contiene el ID autogenerado por MongoDB del usuario que está realizando la compra
+      example:
