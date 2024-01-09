@@ -1,6 +1,11 @@
-<div style="width:1000px; height: 100px; margin-left:auto; margin-right:auto;">
+<div style="width:1000px; height: 120px; margin-left:auto; margin-right:auto;">
     <h2 style="text-align:center;">Lista de productos</h2>
     <p style="text-align: center;">A continuación se muestra una lista de 100 productos paginados</p>
+    {{#if cart}}
+    <div style="text-align: center;">
+        <a href="/api/carts/{{cartid}}">Ir al carrito</a>
+    </div>
+    {{/if}}
 </div>
 
 

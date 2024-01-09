@@ -14,11 +14,11 @@ router.put("/:cid", modifyCart)
 
 router.put("/:cid/products/:pid", modifyProduct)
 
-router.get("/:cid", passportCall("jwt"), authorization("user"), getCart)
+router.get("/:cid", passportCall("jwt"), authorization("user", "upProtocol"), getCart)
 
 router.post("/toCart/:pid", passportCall("jwt"), authorization("user", "anyProtocol"), addToCart)
 
-router.post("/:cid/purchase", passportCall("jwt"), authorization("user"), purchase)
+router.post("/:cid/purchase", passportCall("jwt"), authorization("user", "upProtocol"), purchase)
 
 
 

@@ -46,6 +46,12 @@ export const authorization = (role, protocol) => {
                 next()
                 break;
 
+            case "upProtocol":
+                if (!req.user) return res.status(401).send({ error: "Unauthorized" })
+                if (req.user.role != "premium" && req.user.role != "user") return res.status(403).send({ error: "No tiene permisos" })
+                next()
+                break;
+
             default:
                 if (!req.user) return res.status(401).send({ error: "Unauthorized" })
                 if (req.user.role != role) return res.status(403).send({ error: "No tiene permisos" })

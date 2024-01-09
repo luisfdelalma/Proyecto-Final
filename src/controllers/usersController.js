@@ -30,7 +30,7 @@ export const loginP = async (req, res) => {
         delete user.password
         res.cookie("CoderCookie", token, { maxAge: 60 * 60 * 12 * 1000, httpOnly: true })
         res.cookie("User", userToken, { maxAge: 60 * 60 * 12 * 1000, httpOnly: true })
-        res.send({ message: "logged in!" })
+        res.redirect("/api/products/search")
     }
 }
 
@@ -276,4 +276,20 @@ export const deleteUsersG = async (req, res) => {
     } catch (error) {
         req.logger.error(error)
     }
+}
+
+export const editUsersG = async (req, res) => {
+    const users = await usersServices.getAllUsers()
+    res.render("users", { user: users })
+}
+
+export const editUsersP = async (req, res) => {
+    const users = req.body
+    users.users.forEach(async el => {
+        const role = await usersServices.updateRole(el.id, el.role)
+        if (el.delete === "true") {
+            const del = await usersServices.deleteUser(el.id)
+        }
+    })
+    res.send("Usuarios modificados con éxito")
 }

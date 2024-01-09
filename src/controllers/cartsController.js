@@ -159,12 +159,15 @@ export const purchase = async (req, res) => {
     const ticket = await ticketsServices.create(purchaseCode, purchase_datetime, total, email)
     const getTicket = await ticketsServices.get(email)
 
-    res.render("ticket", { code: getTicket.code, date: getTicket.purchase_datetime, total: getTicket.amount, client: getTicket.purchaser, purchased: finishedPurchase, rejected: rejectedPurchase })
+    res.render("ticket", { code: getTicket.code, date: getTicket.purchase_datetime, total: total, client: getTicket.purchaser, purchased: finishedPurchase, rejected: rejectedPurchase })
 
 
     let finPurIds = finishedPurchase.map(p => p.id)
     console.log(finPurIds);
 
     let deletePurchased = await cartsServices.deleteProduct(parseInt(req.params.cid), finPurIds)
+    finishedPurchase = []
+    rejectedPurchase = []
+    total = 0
 
 }

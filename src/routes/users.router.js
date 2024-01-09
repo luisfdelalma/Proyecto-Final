@@ -4,7 +4,7 @@ import passport from "passport"
 const router = Router()
 
 // IMPORTACIONES (RUTAS) NUEVAS
-import { allUsersG, changePassG, changePassP, chat, current, deleteUsersG, forPassG, forPassP, loginG, loginP, logoutG, newPassConf, registerG, registerP, roleChangeG, roleChangeP } from "../controllers/usersController.js"
+import { allUsersG, changePassG, changePassP, chat, current, deleteUsersG, editUsersG, editUsersP, forPassG, forPassP, loginG, loginP, logoutG, newPassConf, registerG, registerP, roleChangeG, roleChangeP } from "../controllers/usersController.js"
 import { authorization, passportCall } from "../middlewares/utils.js"
 import { deleteProduct } from "../controllers/cartsController.js"
 
@@ -22,6 +22,10 @@ router.get("/logout", logoutG)
 router.get("/getAllUsers", passportCall("jwt"), authorization("admin"), allUsersG)
 
 router.get("/deleteUsers", passportCall("jwt"), authorization("admin"), deleteUsersG)
+
+router.get("/editusers", passportCall("jwt"), authorization("admin"), editUsersG)
+
+router.post("/editusers", passportCall("jwt"), authorization("admin"), editUsersP)
 
 router.get("/current", passportCall("jwt"), authorization("admin"), current)
 

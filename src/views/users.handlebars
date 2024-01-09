@@ -1,0 +1,47 @@
+<div style="width:1000px; height: 100px; margin-left:auto; margin-right:auto;">
+    <h2 style="text-align:center;">Lista de usuarios</h2>
+    <p style="text-align: center;">A continuación se muestra una lista de los clientes en el sistema con sus
+        características actuales, para editar cualquier usuario por favor cambia las opciones, si no quieres cambiar
+        nada puedes dejar las opciones tal como están, al finalizar has click en <b>Guardar</b> para guardar los cambios
+        realizados en el sistema</p>
+</div>
+
+<div style="width:1000px; height: 30px; margin-left:auto; margin-right:auto; margin-top: 50px; border-top: 2px solid;">
+    <div style="display: grid; grid-template-columns: 400px 200px 200px 200px; width: 400px; margin-left: 0px;">
+        <div style="margin:auto;"><b>Usuario</b></div>
+        <div style="margin:auto;"><b>Email</b></div>
+        <div style="margin:auto;"><b>Rol</b></div>
+        <div style="margin:auto;"><b>Eliminar?</b></div>
+    </div>
+
+    <form method="post" action="/api/users/editusers" id="users">
+        <div style="display: grid; grid-template-columns: 400px 200px 200px 200px; width: 400px; margin-left: 0px;">
+            {{#each user}}
+            <div style="margin:auto;">{{first_name}} {{last_name}}</div>
+            <div style="margin:auto;">{{email}}</div>
+            <div style="margin:auto;">
+
+                <input type="hidden" name="users[{{@index}}][id]" value="{{_id}}">
+                <select name="users[{{@index}}][role]" id="rol">
+                    <option value="{{role}}" selected>{{role}}</option>
+                    <option value="premium">premium</option>
+                    <option value="user">user</option>
+                </select>
+
+            </div>
+            <div style="margin:auto;">
+
+                <select name="users[{{@index}}][delete]" id="delete">
+                    <option value="false" selected>No</option>
+                    <option value="true">Si</option>
+                </select>
+
+            </div>
+            {{/each}}
+        </div>
+        <div style="width:1000px; display:grid; place-items:center; margin-top:30px">
+            <button type="submit" form="users">Guardar</button>
+        </div>
+    </form>
+
+</div>
